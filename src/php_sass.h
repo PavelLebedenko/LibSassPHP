@@ -1,9 +1,11 @@
 /**
  * Sass
  * PHP bindings to libsass - fast, native Sass parsing in PHP!
- *
+ * Forked by Shlomo Hassid and updated to include more features and to be more stable.
  * https://github.com/jamierumbelow/sassphp
  * Copyright (c)2012 Jamie Rumbelow <http://jamierumbelow.net>
+ *
+ * Fork updated and maintained by https://github.com/shlomohass/
  */
 
 #ifndef PHP_SASS_H
@@ -13,7 +15,7 @@
 #include "config.h"
 #endif
 
-#define SASS_VERSION "0.4.6-dev"
+#define SASS_VERSION "0.4.7"
 #define SASS_FLAVOR  "sensational"
 
 #include <php.h>
@@ -33,6 +35,8 @@ PHP_METHOD(Sass, compile);
 PHP_METHOD(Sass, compileFile);
 PHP_METHOD(Sass, getStyle);
 PHP_METHOD(Sass, setStyle);
+PHP_METHOD(Sass, getSyntax);
+PHP_METHOD(Sass, setSyntax);
 PHP_METHOD(Sass, getIncludePath);
 PHP_METHOD(Sass, setIncludePath);
 PHP_METHOD(Sass, getPrecision);

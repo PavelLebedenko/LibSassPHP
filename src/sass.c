@@ -1,11 +1,11 @@
 /**
  * Sass
  * PHP bindings to libsass - fast, native Sass parsing in PHP!
- *
+ * Forked by Shlomo Hassid and updated to include more features and to be more stable.
  * https://github.com/jamierumbelow/sassphp
  * Copyright (c)2012 Jamie Rumbelow <http://jamierumbelow.net>
  *
- * Fork updated and maintained by https://github.com/pilif
+ * Fork updated and maintained by https://github.com/shlomohass/
  */
 
 #include <stdio.h>
@@ -22,6 +22,7 @@ zend_object_handlers sass_handlers;
 typedef struct sass_object {
     zend_object zo;
     int style;
+    bool use_sass_syntax;
     char* include_paths;
     long precision;
     bool comments;
@@ -84,6 +85,7 @@ PHP_METHOD(Sass, __construct)
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->style = SASS_STYLE_NESTED;
+    obj->use_sass_syntax = false;
     obj->include_paths = NULL;
     obj->precision = 5;
     obj->map_path = NULL;
@@ -92,6 +94,7 @@ PHP_METHOD(Sass, __construct)
     obj->map_embed = false;
     obj->map_contents = false;
     obj->omit_map_url = true;
+    
 }
 
 
@@ -101,6 +104,7 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
 
     sass_option_set_precision(opts, this->precision);
     sass_option_set_output_style(opts, this->style);
+    sass_option_set_is_indented_syntax_src(opts, this->use_sass_syntax);
     if (this->include_paths != NULL) {
         sass_option_set_include_path(opts, this->include_paths);
     }
@@ -249,6 +253,34 @@ PHP_METHOD(Sass, setStyle)
     RETURN_NULL();
 }
 
+PHP_METHOD(Sass, getSyntax)
+{
+    zval *this = getThis();
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    RETURN_BOOL(obj->use_sass_syntax);
+}
+
+PHP_METHOD(Sass, setSyntax)
+{
+    zval *this = getThis();
+
+    bool new_syntax;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &new_syntax) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    obj->use_sass_syntax = new_syntax;
+
+    RETURN_NULL();
+}
+
 PHP_METHOD(Sass, getIncludePath)
 {
     zval *this = getThis();
@@ -312,7 +344,6 @@ PHP_METHOD(Sass, setMapPath)
     RETURN_NULL();
 }
 
-
 PHP_METHOD(Sass, getPrecision)
 {
     zval *this = getThis();
@@ -369,7 +400,6 @@ PHP_METHOD(Sass, setEmbed)
     RETURN_NULL();
 }
 
-
 PHP_METHOD(Sass, getComments)
 {
     zval *this = getThis();
@@ -397,7 +427,6 @@ PHP_METHOD(Sass, setComments)
 
     RETURN_NULL();
 }
-
 
 PHP_METHOD(Sass, getLibraryVersion)
 {
@@ -435,6 +464,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setStyle, 0, 0, 1)
     ZEND_ARG_INFO(0, style)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setSyntax, 0, 0, 1)
+    ZEND_ARG_INFO(0, use_sass_syntax)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setIncludePath, 0, 0, 1)
     ZEND_ARG_INFO(0, include_path)
 ZEND_END_ARG_INFO()
@@ -461,6 +494,8 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  compileFile,       arginfo_sass_compileFile,    ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getStyle,          arginfo_sass_void,           ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setStyle,          arginfo_sass_setStyle,       ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  getSyntax,         arginfo_sass_void,           ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  setSyntax,         arginfo_sass_setSyntax,      ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getIncludePath,    arginfo_sass_void,           ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setIncludePath,    arginfo_sass_setIncludePath, ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getPrecision,      arginfo_sass_void,           ZEND_ACC_PUBLIC)

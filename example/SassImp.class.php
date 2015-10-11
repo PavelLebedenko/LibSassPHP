@@ -58,7 +58,7 @@ class SassImp {
         $sass = new Sass();
         $source = ($_cleanDuplicates)?$this->cleanDuplicate($this->sourceCSS):$this->sourceCSS;
         $sass->setPrecision($this->precisionValue);
-        $sass->setSyntax($this->useSyntax)
+        $sass->setSyntax($this->useSyntax);
         try {
             if ($_useIncludes) { 
                 $sass->setIncludePath("/opt/moresass/");

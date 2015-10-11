@@ -20,7 +20,7 @@ $s3 =
         float: left
 ";
 $Compiler = new SassImp();              //Build Class
-$Compiler->source($s2);                 //Set Source
+$Compiler->source($s3);                 //Set Source
 $Compiler->syntax(true);                //Use Indented syntax : SASS.
 $compiled = $Compiler->parseSCSS() ?    //Try to parse.
             $Compiler->compiled()  :    //Get Copiled Or False

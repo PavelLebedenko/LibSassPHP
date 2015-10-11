@@ -2,6 +2,7 @@
 
 The `sass` extension (LibSassPHP) for PHP gives you an object-oriented system of parsing [Sass](http://sass-lang.com/) from within your PHP applications. Under the hood it uses [libsass](https://github.com/hcatlin/libsass) to provide super speedy and compatible Sass parsing.
 And supports both synax (idebted and not - SASS, SCSS).
+
 **Supported and tested only on UNIX based servers that runs PHP5.x**
 
 ## What's Sass?
@@ -132,16 +133,16 @@ If there's a problem, the extension will throw a `SassException`:
 
 ## Changelog
 
-**Version 0.4.7
+**Version 0.4.7**
 * Addet Syntax support.
 
-**Version 0.4.5 
+**Version 0.4.5**
 * Holiday Patch (Libsass 3.2.5) stable
 
-**Version 0.4.4 
+**Version 0.4.4**
 * Refactor correctly for LibSass 3.2.4
 
-**Version 0.4.2
+**Version 0.4.2**
 * CamelCase compile sequence
 
 **Version 0.4.1**

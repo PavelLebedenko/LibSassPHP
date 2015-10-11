@@ -72,8 +72,7 @@ class SassImp {
         $this->compiled($css);
         return true;
     }
-    
-    public 
+
     public function cleanDuplicate() {
         
     }
